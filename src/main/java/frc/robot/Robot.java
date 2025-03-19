@@ -96,7 +96,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {
+  public void teleopInit() {}
+
+  @Override
+  public void teleopPeriodic() {
     if (manualControl.getSelected()) {
       if (driverController.getLeftTriggerAxis() > 0 && driverController.getRightTriggerAxis() > 0) {
         motor1.set(0);
@@ -112,9 +115,6 @@ public class Robot extends TimedRobot {
       }
     }
   }
-
-  @Override
-  public void teleopPeriodic() {}
 
   public void run() {
     // Update motor config with new PID values
