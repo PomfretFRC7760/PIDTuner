@@ -3,8 +3,10 @@ package frc.robot;
 import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -24,6 +26,9 @@ public class Robot extends TimedRobot {
   private SparkClosedLoopController closedLoopController1 = motor1.getClosedLoopController();
   private SparkClosedLoopController closedLoopController2 = motor2.getClosedLoopController();
   private SparkMaxConfig motorConfig = new SparkMaxConfig();
+  private final CommandXboxController driverController = new CommandXboxController(
+      0);
+  private final SendableChooser<Boolean> manualControl = new SendableChooser<>();
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
   private double targetPosition = 0;
@@ -66,7 +71,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Target Position", targetPosition);
 
     // Add a button to run the command
-    SmartDashboard.putData("Run Motor", new InstantCommand(this::run));
+    SmartDashboard.putData("Run Motor", new InstantCommand(() -> run()));
+    manualControl.setDefaultOption("Off", false);
+    manualControl.addOption("On", true);
+
+    SmartDashboard.putData("Manual Control", manualControl);
   }
 
   @Override
@@ -87,7 +96,22 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    if (manualControl.getSelected()) {
+      if (driverController.getLeftTriggerAxis() > 0 && driverController.getRightTriggerAxis() > 0) {
+        motor1.set(0);
+        motor2.set(0);
+      } 
+      else if (driverController.getLeftTriggerAxis() > 0) {
+        motor1.set(-driverController.getLeftTriggerAxis());
+        motor2.set(-driverController.getLeftTriggerAxis());
+      }
+      else {
+        motor1.set(driverController.getRightTriggerAxis());
+        motor2.set(driverController.getRightTriggerAxis());
+      }
+    }
+  }
 
   @Override
   public void teleopPeriodic() {}
