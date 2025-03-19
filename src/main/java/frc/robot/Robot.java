@@ -106,12 +106,12 @@ public class Robot extends TimedRobot {
         motor2.set(0);
       } 
       else if (driverController.getLeftTriggerAxis() > 0) {
-        motor1.set(-driverController.getLeftTriggerAxis());
-        motor2.set(-driverController.getLeftTriggerAxis());
+        motor1.set(-driverController.getLeftTriggerAxis()/2);
+        motor2.set(-driverController.getLeftTriggerAxis()/2);
       }
       else {
-        motor1.set(driverController.getRightTriggerAxis());
-        motor2.set(driverController.getRightTriggerAxis());
+        motor1.set(driverController.getRightTriggerAxis()/2);
+        motor2.set(driverController.getRightTriggerAxis()/2);
       }
     }
   }
