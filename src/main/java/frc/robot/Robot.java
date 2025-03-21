@@ -114,6 +114,12 @@ public class Robot extends TimedRobot {
         motor2.set(driverController.getRightTriggerAxis()/2);
       }
     }
+    SmartDashboard.putNumber("Current P", kP);
+    SmartDashboard.putNumber("Current I", kI);
+    SmartDashboard.putNumber("Current D", kD);
+    SmartDashboard.putNumber("Current Iz", kIz);
+    SmartDashboard.putNumber("Current FF", kFF);
+    SmartDashboard.putNumber("Current Target Position", targetPosition);
   }
 
   public void run() {
